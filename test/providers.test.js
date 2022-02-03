@@ -109,7 +109,7 @@ test('json rpc query view_state', withProvider(async (provider) => {
     const account = await testUtils.createAccount(near);
     const contract = await testUtils.deployContract(account, testUtils.generateUniqueString('test'));
 
-    await contract.setValue({ args: { value: 'hello' } });
+    await contract.setValue({ value: 'hello' });
 
     return testUtils.waitFor(async() => {
         const response = await provider.query({
@@ -173,7 +173,7 @@ test('json rpc query call_function', withProvider(async (provider) => {
     const account = await testUtils.createAccount(near);
     const contract = await testUtils.deployContract(account, testUtils.generateUniqueString('test'));
 
-    await contract.setValue({ args: { value: 'hello' } });
+    await contract.setValue({ value: 'hello' });
 
     return testUtils.waitFor(async() => {
         const response = await provider.query({
