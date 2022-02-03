@@ -123,7 +123,7 @@ export class Contract {
         });
     }
 
-    private async _changeMethodRaw(methodName: string, args: object, options: ChangeMethodOptions = {}) {
+    private async _changeMethodRaw(methodName: string, args: object = {}, options: ChangeMethodOptions = {}) {
         validateBNLike({ gas: options.gas, attachedDeposit: options.attachedDeposit });
         const result = await this.account.functionCall({
             contractId: this.contractId,
@@ -135,7 +135,7 @@ export class Contract {
         return result;
     }
     
-    private async _changeMethod(methodName: string, args: object, options: ChangeMethodOptions) {
+    private async _changeMethod(methodName: string, args: object = {}, options: ChangeMethodOptions) {
         const result = await this._changeMethodRaw(methodName, args, options);
         return getTransactionLastResult(result);
     }
