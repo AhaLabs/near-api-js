@@ -1,4 +1,11 @@
+import BN from 'bn.js';
 import { Account } from './account';
+export interface ChangeMethodOptions {
+    gas?: BN;
+    attachedDeposit?: BN;
+    walletMeta?: string;
+    walletCallbackUrl?: string;
+}
 export interface ContractMethods {
     /**
      * Methods that change state. These methods cost gas and require a signed transaction.

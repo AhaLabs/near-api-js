@@ -18,7 +18,7 @@ const isUint8Array = (x: any) =>
 const isObject = (x: any) =>
     Object.prototype.toString.call(x) === '[object Object]';
 
-interface ChangeMethodOptions {
+export interface ChangeMethodOptions {
     gas?: BN;
     attachedDeposit?: BN;
     walletMeta?: string;

@@ -5,7 +5,7 @@ jobs:
     strategy:
       matrix:
         platform: [ubuntu-latest, macos-latest]
-        node-version: ['14', '16']
+        node-version: ['16']
     runs-on: ${{ matrix.platform }}
     env:
       NODE_ENV: ci
@@ -20,4 +20,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn  && yarn danger ci
       - name: Run tests
-        run: yarn&& yarn test
+        run: yarn && yarn test
