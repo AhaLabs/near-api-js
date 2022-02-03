@@ -1,9 +1,12 @@
-# near-api-js
-
-[![Build Status](https://travis-ci.com/near/near-api-js.svg?branch=master)](https://travis-ci.com/near/near-api-js)
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/near/near-api-js) 
+# near-api-js – Aha Labs mods
 
 A JavaScript/TypeScript library for development of DApps on the NEAR platform
+
+The `develop` branch here in the AhaLabs GitHub org is our own long-running branch. Anything merged to this branch has already been submitted as a [PR to the official version](https://github.com/near/near-api-js/pulls), but can be used immediately by referencing this repo + [tag](https://github.com/AhaLabs/near-api-js/tags) in your `package.json`:
+
+```js
+"near-api-js": "AhaLabs/near-api-js#v1.0.0"
+```
 
 # Documentation
 
@@ -14,9 +17,11 @@ A JavaScript/TypeScript library for development of DApps on the NEAR platform
 # Examples
 
 ## [Quick Reference](https://github.com/near/near-api-js/blob/master/examples/quick-reference.md)
+
 _(Cheat sheet / quick reference)_
 
 ## [Cookbook](https://github.com/near/near-api-js/blob/master/examples/cookbook/README.md)
+
 _(Common use cases / more complex examples)_
 
 ---
@@ -25,12 +30,11 @@ _(Common use cases / more complex examples)_
 
 1. Install dependencies
 
-       yarn
+    yarn
 
 2. Run continuous build with:
 
-       yarn build -- -w
-
+    yarn build -- -w
 
 # Publish
 
