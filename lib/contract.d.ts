@@ -1,4 +1,11 @@
+import BN from 'bn.js';
 import { Account } from './account';
+export interface ChangeMethodOptions {
+    gas?: BN;
+    attachedDeposit?: BN;
+    walletMeta?: string;
+    walletCallbackUrl?: string;
+}
 export interface ContractMethods {
     /**
      * Methods that change state. These methods cost gas and require a signed transaction.
@@ -56,5 +63,6 @@ export declare class Contract {
      * @param options NEAR smart contract methods that your application will use. These will be available as `contract.methodName`
      */
     constructor(account: Account, contractId: string, options: ContractMethods);
+    private _changeMethodRaw;
     private _changeMethod;
 }

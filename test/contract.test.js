@@ -75,19 +75,18 @@ describe('viewMethod', () => {
 
 describe('changeMethod', () => {
     test('throws error message for invalid gas argument', () => {
-        return expect(contract.changeMethod({ a: 1}, 'whatever')).rejects.toThrow(/Expected number, decimal string or BN for 'gas' argument, but got.+/);
+        return expect(contract.changeMethod({ a: 1}, 'whatever')).rejects.toThrow(/Expected object for 'options' argument, but got '"whatever"'/);
     });
 
     test('gives error message for invalid amount argument', () => {
-        return expect(contract.changeMethod({ a: 1}, 1000, 'whatever')).rejects.toThrow(/Expected number, decimal string or BN for 'amount' argument, but got.+/);
+        return expect(contract.changeMethod({ a: 1}, 1000, 'whatever')).rejects.toThrow(/Expected object for 'options' argument, but got '1000'/);
     });
 
     test('makes a functionCall and passes along walletCallbackUrl and walletMeta', async() => {
         account.functionCall = jest.fn(() => Promise.resolve(account));
-        await contract.changeMethod({
-            args: {},
-            meta: 'someMeta',
-            callbackUrl: 'http://neartest.test/somepath?and=query',
+        await contract.changeMethod({}, {
+            walletMeta: 'someMeta',
+            walletCallbackUrl: 'http://neartest.test/somepath?and=query',
         });
 
         expect(account.functionCall).toHaveBeenCalledWith({

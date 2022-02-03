@@ -1,5 +1,4 @@
 import BN from 'bn.js';
-import depd from 'depd';
 import { Account } from './account';
 import { getTransactionLastResult } from './providers';
 import { PositionalArgsError, ArgumentTypeError } from './utils/errors';
@@ -19,13 +18,11 @@ const isUint8Array = (x: any) =>
 const isObject = (x: any) =>
     Object.prototype.toString.call(x) === '[object Object]';
 
-interface ChangeMethodOptions {
-    args: object;
-    methodName: string;
+export interface ChangeMethodOptions {
     gas?: BN;
-    amount?: BN;
-    meta?: string;
-    callbackUrl?: string;
+    attachedDeposit?: BN;
+    walletMeta?: string;
+    walletCallbackUrl?: string;
 }
 
 export interface ContractMethods {
@@ -103,47 +100,46 @@ export class Contract {
                 })
             });
         });
-        changeMethods.forEach((methodName) => {
-            Object.defineProperty(this, methodName, {
-                writable: false,
-                enumerable: true,
-                value: nameFunction(methodName, async (...args: any[]) => {
-                    if (args.length && (args.length > 3 || !(isObject(args[0]) || isUint8Array(args[0])))) {
-                        throw new PositionalArgsError();
-                    }
-
-                    if(args.length > 1 || !(args[0] && args[0].args)) {
-                        const deprecate = depd('contract.methodName(args, gas, amount)');
-                        deprecate('use `contract.methodName({ args, gas?, amount?, callbackUrl?, meta? })` instead');
-                        return this._changeMethod({
-                            methodName,
-                            args: args[0],
-                            gas: args[1],
-                            amount: args[2]
-                        });
-                    }
-
-                    return this._changeMethod({ methodName, ...args[0] });
-                })
+        changeMethods.forEach((baseMethodName) => {
+            ['', 'Raw'].forEach((resultType) => {
+                const methodName = `${baseMethodName}${resultType}`;
+                Object.defineProperty(this, methodName, {
+                    writable: false,
+                    enumerable: true,
+                    value: nameFunction(methodName, async (...args: any[]) => {
+                        if (args.length && (args.length > 3 || !(isObject(args[0]) || isUint8Array(args[0])))) {
+                            throw new PositionalArgsError();
+                        }
+                        if(args.length >= 1 && !(isObject(args[0]) || isUint8Array(args[0]))) {
+                          throw new ArgumentTypeError("args", "object or Uint8Array", args[0]);
+                        } 
+                        if (args.length >= 2 && !isObject(args[1])) {
+                          throw new ArgumentTypeError("options", "object", args[1]);
+                        }
+                        return this[resultType === '' ? '_changeMethod' : '_changeMethodRaw'](baseMethodName, args[0], args[1]);
+                    })
+                });
             });
         });
     }
 
-    private async _changeMethod({ args, methodName, gas, amount, meta, callbackUrl }: ChangeMethodOptions) {
-        validateBNLike({ gas, amount });
-
-        const rawResult = await this.account.functionCall({
+    private async _changeMethodRaw(methodName: string, args: object, options: ChangeMethodOptions = {}) {
+        validateBNLike({ gas: options.gas, attachedDeposit: options.attachedDeposit });
+        const result = await this.account.functionCall({
             contractId: this.contractId,
             methodName,
             args,
-            gas,
-            attachedDeposit: amount,
-            walletMeta: meta,
-            walletCallbackUrl: callbackUrl
+            ...options,
         });
 
-        return getTransactionLastResult(rawResult);
+        return result;
     }
+    
+    private async _changeMethod(methodName: string, args: object, options: ChangeMethodOptions) {
+        const result = await this._changeMethodRaw(methodName, args, options);
+        return getTransactionLastResult(result);
+    }
+
 }
 
 /**
