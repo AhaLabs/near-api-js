@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import BN from 'bn.js';
 import { Account } from './account';
 export interface ChangeMethodOptions {
@@ -6,10 +5,6 @@ export interface ChangeMethodOptions {
     attachedDeposit?: BN;
     walletMeta?: string;
     walletCallbackUrl?: string;
-}
-export interface ViewMethodOptions {
-    parse?: (response: Uint8Array) => any;
-    stringify?: (input: any) => Buffer;
 }
 export interface ContractMethods {
     /**

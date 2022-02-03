@@ -24,12 +24,6 @@ export interface ChangeMethodOptions {
     walletMeta?: string;
     walletCallbackUrl?: string;
 }
-
-export interface ViewMethodOptions {
-  parse?: (response: Uint8Array) => any;
-  stringify?: (input: any) => Buffer;
-}
-
 export interface ContractMethods {
     /**
      * Methods that change state. These methods cost gas and require a signed transaction.

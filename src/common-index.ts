@@ -4,12 +4,12 @@ import * as utils from './utils';
 import * as transactions from './transaction';
 import * as validators from './validators';
 
-import { Account } from './account';
+import { Account, ViewFunctionOptions } from './account';
 import * as multisig from './account_multisig';
 import * as accountCreator from './account_creator';
 import { Connection } from './connection';
 import { Signer, InMemorySigner } from './signer';
-import { Contract, ChangeMethodOptions, ViewMethodOptions } from './contract';
+import { Contract, ChangeMethodOptions,  } from './contract';
 import { KeyPair } from './utils/key_pair';
 import { Near } from './near';
 
@@ -29,10 +29,10 @@ export {
 
     multisig,
     Account,
+    ViewFunctionOptions,
     Connection,
     Contract,
     ChangeMethodOptions,
-    ViewMethodOptions,
     InMemorySigner,
     Signer,
     KeyPair,
