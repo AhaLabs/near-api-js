@@ -66,8 +66,10 @@ export interface FunctionCallOptions {
      */
     stringify?: (input: any) => Buffer;
 }
-declare function parseJsonFromRawResponse(response: Uint8Array): any;
-declare function bytesJsonStringify(input: any): Buffer;
+export interface ViewFunctionOptions {
+    parse?: (response: Uint8Array) => any;
+    stringify?: (input: any) => Buffer;
+}
 /**
  * This class provides common account related RPC calls including signing transactions with a {@link KeyPair}.
  *
@@ -207,10 +209,7 @@ export declare class Account {
      * @param options.stringify Convert input arguments into a bytes array. By default the input is treated as a JSON.
      * @returns {Promise<any>}
      */
-    viewFunction(contractId: string, methodName: string, args?: any, { parse, stringify }?: {
-        parse?: typeof parseJsonFromRawResponse;
-        stringify?: typeof bytesJsonStringify;
-    }): Promise<any>;
+    viewFunction(contractId: string, methodName: string, args?: any, { parse, stringify }?: ViewFunctionOptions): Promise<any>;
     /**
      * Returns the state (key value pairs) of this account's contract based on the key prefix.
      * Pass an empty string for prefix if you would like to return the entire state.
@@ -244,4 +243,3 @@ export declare class Account {
      */
     getAccountBalance(): Promise<AccountBalance>;
 }
-export {};

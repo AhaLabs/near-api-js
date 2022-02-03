@@ -108,6 +108,11 @@ interface ReceiptLogWithFailure {
     failure: ServerError;
 }
 
+export interface ViewFunctionOptions {
+  parse?: (response: Uint8Array) => any;
+  stringify?: (input: any) => Buffer;
+}
+
 function parseJsonFromRawResponse (response: Uint8Array): any {
     return JSON.parse(Buffer.from(response).toString());
 }
@@ -517,7 +522,7 @@ export class Account {
         contractId: string,
         methodName: string,
         args: any = {},
-        { parse = parseJsonFromRawResponse, stringify = bytesJsonStringify } = {}
+        { parse = parseJsonFromRawResponse, stringify = bytesJsonStringify }: ViewFunctionOptions = {}
     ): Promise<any> {
         this.validateArgs(args);
         const serializedArgs = stringify(args).toString('base64');
