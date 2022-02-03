@@ -15,7 +15,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Run tests
-        run: yarn && yarn test
       - name: Check Danger
-        run : yarn danger ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn  && yarn danger ci
+      - name: Run tests
+        run: yarn&& yarn test
