@@ -65,4 +65,5 @@ export declare class Contract {
     constructor(account: Account, contractId: string, options: ContractMethods);
     private _changeMethodRaw;
     private _changeMethod;
+    private _functionCallTx;
 }

@@ -1,6 +1,8 @@
 import BN from 'bn.js';
+import { DEFAULT_FUNCTION_CALL_GAS, NEAR } from '.';
 import { Account } from './account';
 import { getTransactionLastResult } from './providers';
+import { functionCall } from './transaction';
 import { PositionalArgsError, ArgumentTypeError } from './utils/errors';
 
 // Makes `function.name` return given name
@@ -101,7 +103,7 @@ export class Contract {
             });
         });
         changeMethods.forEach((baseMethodName) => {
-            ['', 'Raw'].forEach((resultType) => {
+            ['', 'Raw', "Tx"].forEach((resultType) => {
                 const methodName = `${baseMethodName}${resultType}`;
                 Object.defineProperty(this, methodName, {
                     writable: false,
@@ -116,28 +118,32 @@ export class Contract {
                         if (args.length >= 2 && !isObject(args[1])) {
                           throw new ArgumentTypeError("options", "object", args[1]);
                         }
-                        return this[resultType === '' ? '_changeMethod' : '_changeMethodRaw'](baseMethodName, args[0], args[1]);
+                        return this[`_changeMethod${resultType}`](baseMethodName, args[0], args[1]);
                     })
                 });
             });
         });
     }
 
-    private async _changeMethodRaw(methodName: string, args: object = {}, options: ChangeMethodOptions = {}) {
+    private _changeMethodRaw(methodName: string, args: object = {}, options: ChangeMethodOptions = {}) {
         validateBNLike({ gas: options.gas, attachedDeposit: options.attachedDeposit });
-        const result = await this.account.functionCall({
+        return this.account.functionCall({
             contractId: this.contractId,
             methodName,
             args,
             ...options,
         });
-
-        return result;
     }
     
+    // @ts-ignore: is referenced
     private async _changeMethod(methodName: string, args: object = {}, options: ChangeMethodOptions) {
         const result = await this._changeMethodRaw(methodName, args, options);
         return getTransactionLastResult(result);
+    }
+
+    // @ts-ignore: is referenced
+    private _functionCallTx(methodName: string, args: object = {}, options: ChangeMethodOptions) {
+      return functionCall(methodName, args, options.gas ?? DEFAULT_FUNCTION_CALL_GAS, options.attachedDeposit ?? NEAR.from(0))
     }
 
 }
