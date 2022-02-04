@@ -143,7 +143,7 @@ export class Contract {
     }
 
     // @ts-ignore: is referenced
-    private _functionCallTx(methodName: string, args: object = {}, options: ChangeMethodOptions) {
+    private _changeMethodTx(methodName: string, args: object = {}, options: ChangeMethodOptions) {
       return functionCall(methodName, args, options.gas ?? DEFAULT_FUNCTION_CALL_GAS, options.attachedDeposit ?? NEAR.from(0))
     }
 
