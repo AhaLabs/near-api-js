@@ -108,7 +108,8 @@ export class Contract {
                 Object.defineProperty(this, methodName, {
                     writable: false,
                     enumerable: true,
-                    value: nameFunction(methodName, async (...args: any[]) => {
+                    value: nameFunction(methodName, (...args: any[]) => {
+                      console.log(`_changeMethod${resultType}`)
                         if (args.length && (args.length > 3 || !(isObject(args[0]) || isUint8Array(args[0])))) {
                             throw new PositionalArgsError();
                         }
